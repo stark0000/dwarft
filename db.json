@@ -1,11 +1,6 @@
 {
   "universes": [
     {
-      "id": 1,
-      "ref": "cunaë01",
-      "name": "cunaë"
-    },
-    {
       "ref": "t1",
       "name": "pouet",
       "id": 2
@@ -13,6 +8,10 @@
     {
       "name": "Stark",
       "id": 3
+    },
+    {
+      "name": "jambon",
+      "id": 4
     }
   ],
   "postits": [
