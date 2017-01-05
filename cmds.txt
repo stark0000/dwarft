@@ -1,0 +1,4 @@
+eval $(ssh-agent)
+ssh-add ../back/k
+npm start
+json-server --watch db/db.json

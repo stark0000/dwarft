@@ -1,0 +1,63 @@
+{
+  "universes": [
+    {
+      "ref": "t1",
+      "name": "pouet",
+      "id": 2
+    },
+    {
+      "name": "Stark",
+      "id": 3
+    },
+    {
+      "name": "jambon",
+      "id": "jambon",
+      "children": [
+        {
+          "name": "au",
+          "children": [
+            {
+              "name": "paté"
+            },
+            {
+              "name": "truffe"
+            }
+          ]
+        },
+        {
+          "name": "du",
+          "children": [
+            {
+              "name": "terroir",
+              "children": [
+                {
+                  "name": "breton"
+                },
+                {
+                  "name": "khajit",
+                  "pouet":"xd",
+                  "xd":"kaj",
+                  "children": [
+                    {
+                      "name": "nu",
+                      "xd":"nue"
+                    },
+                    {
+                      "name": "poilu"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "postits": [
+    {
+      "id": 1,
+      "content": "rien de bien intéressant"
+    }
+  ]
+}
