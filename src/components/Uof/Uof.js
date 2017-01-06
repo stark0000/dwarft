@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { ObjectsService } from '../../services'
-import addb from '../../ressources/add.png';
+//import { Link } from 'react-router'
+
 import remove from '../../ressources/remove.png';
+import addb from '../../ressources/add.png';
+
 import Nav from './Nav'
-import { Link } from 'react-router'
+import Children from './Children';
+import AddField from './AddField';
 class Uof extends Component {
 
     constructor(props) {
@@ -11,12 +15,13 @@ class Uof extends Component {
         this.handleChangeName = this.handleChangeName.bind(this);
         this.handleChangeData = this.handleChangeData.bind(this);
 
+        this.handleChangeType = this.handleChangeType.bind(this);
         this.handleChangeKey = this.handleChangeKey.bind(this);
         this.handleChangeValue = this.handleChangeValue.bind(this);
 
         this.deleteuofProp = this.deleteuofProp.bind(this);
 
-        this.state = { uof: {}, uot: {}, uoc: [], utp: "", newProp: { name: "", data: "" } }
+        this.state = { uof: {}, uot: {}, uoc: [], utp: "", newProp: { name: "", data: "", type: "prop" } }
     }
 
     componentDidMount() {
@@ -69,10 +74,24 @@ class Uof extends Component {
     adduofProp() {
         var un = this.state.uof;
         var np = this.state.newProp;
-        un[np.name] = np.data;
-        this.setState({ uof: un });
+        if (np.type === "prop") {
+            un[np.name] = np.data;
+            this.setState({ uof: un });
+        } else if (np.type === "child") {
+            var uoc = this.state.uoc
+            uoc.push({ name: np.name, children: [] })
+            this.setState({ uoc: uoc })
+        } else {
+            console.log("undef type in : add property")
+        }
     }
 
+    //new property type edit
+    handleChangeType(e) {
+        var np = this.state.newProp;
+        np.type = e.target.value;
+        this.setState({ newProp: np });
+    }
     //new property key name edit
     handleChangeName(e) {
         var np = this.state.newProp;
@@ -131,43 +150,66 @@ class Uof extends Component {
         var name = uof.name
         return (
             <div>
-
-                <div>
-                    {links.map((link) => (<Link to={link[1]} name={link[1]}> > {link[0]}</Link>))}
-                </div>
+                <Nav links={links} />
 
                 <h3>uof {name}</h3>
+
                 {JSON.stringify(this.state)}<br />
                 {JSON.stringify(uof)}
-                <ul>
-                    {Object.keys(uof).map(key =>
-                        <li key={key}>
-                            <input name={key} defaultValue={key} onChange={this.handleChangeKey} />
-                            &nbsp;=&nbsp;
-                            <input name={key} defaultValue={uof[key]} onChange={this.handleChangeValue} />
 
-                            <button onClick={() => this.deleteuofProp(key)}>
-                                <img width="15px" height="15px" src={remove} alt="remove"></img>
-                            </button>
-                        </li>
-                    )}
-                </ul>
-                <input name="name" onChange={this.handleChangeName} /> =&nbsp;
-                <input name="data" onChange={this.handleChangeData} />
-                <button onClick={() => this.adduofProp()}>
-                    <img width="15px" height="15px" src={addb} alt="add"></img>
-                </button>
-                <p>Children</p>
-                <ul>
-                    {Object.keys(this.state.uoc).map(key =>
-                        <li key={key}>
-                            <Link to={utp + "/" + this.state.uoc[key]['name']}>{this.state.uoc[key]['name']}</Link>
-                            <button onClick={() => this.deleteuofProp(key)}>
-                                <img width="15px" height="15px" src={remove} alt="remove"></img>
-                            </button>
-                        </li>
-                    )}
-                </ul>
+                <h4>properties</h4>
+                <div id="propertiesList">
+                    <ul>
+                        {Object.keys(uof).map(key =>
+                            <li key={key}>
+                                <input name={key} value={key} onChange={this.handleChangeKey} />
+                                &nbsp;=&nbsp;
+                            <input name={key} value={uof[key]} onChange={this.handleChangeValue} />
+
+                                <button onClick={() => this.deleteuofProp(key)}>
+                                    <img width="15px" height="15px" src={remove} alt="remove"></img>
+                                </button>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+
+                <h4>Children</h4>
+                <div id="childrenList">
+                    <ul>
+                        {Object.keys(this.state.uoc).map(child =>
+                            <Children
+                                key={child}
+                                name={this.state.uoc[child].name}
+                                utp={utp}
+                                deleteuofProp={this.deleteuofProp}
+                                />
+                        )}
+                    </ul>
+                </div>
+
+
+                <h4>add property</h4>
+                <div id="addPropField">
+                    property type&nbsp;
+                    <select name="type" onChange={this.handleChangeType}>
+                        <option value="prop">prop</option>
+                        <option value="text">text</option>
+                        <option value="pic">pic</option>
+                        <option value="child">child</option>
+                    </select>
+
+                    <AddField
+                        tof={this.state.newProp.type}
+                        handleChangeName={this.handleChangeName}
+                        handleChangeData={this.handleChangeData}
+                        adduofProp={this.handleChangeData}
+                        />
+                    <button onClick={() => this.adduofProp()}>commit
+                        <img width="15px" height="15px" src={addb} alt="add"></img>
+                    </button>
+                </div>
+
             </div>
         )
     }

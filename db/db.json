@@ -1,11 +1,6 @@
 {
   "universes": [
     {
-      "ref": "t1",
-      "name": "pouet",
-      "id": 2
-    },
-    {
       "name": "Stark",
       "id": 3
     },
@@ -35,12 +30,12 @@
                 },
                 {
                   "name": "khajit",
-                  "pouet":"xd",
-                  "xd":"kaj",
+                  "pouet": "xd",
+                  "xd": "kaj",
                   "children": [
                     {
                       "name": "nu",
-                      "xd":"nue"
+                      "xd": "nue"
                     },
                     {
                       "name": "poilu"

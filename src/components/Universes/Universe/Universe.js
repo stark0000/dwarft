@@ -6,7 +6,7 @@ const Universe = ({ id, name, onRemove }) => {
     return (
         <ul>
             <li key={id}>
-                <Link to={`/universe/${id}`}>
+                <Link to={`/uof/${id}`}>
                 {name}
                     <img width="15px" src={edit} alt="edit"></img>
                 </Link>

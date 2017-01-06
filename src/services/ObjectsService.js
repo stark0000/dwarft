@@ -8,10 +8,6 @@ class Service {
     return HttpService.fetch(`${url}${parent}/${id}`)
   }
 
-  parsetree(tree) {
-    return tree.split("/")
-  }
-
   parseGetChild(o, name) {
     var children = o.children
     for (var child in children) {
@@ -22,7 +18,8 @@ class Service {
 
 getObject(tree, o) {
   var obj = o;
-  var chain = this.parsetree(tree)
+  if(!tree) return o;
+  var chain = tree.split("/")
 
   for (var i=0; i<chain.length;i++) {
     if (!obj.children) return false

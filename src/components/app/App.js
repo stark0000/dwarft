@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../../ressources/App.css';
 import Header from '../Header';
 import Footer from '../Footer';
 import NavBar from '../NavBar';
-import Draftjs from '../Draftjs';
-import Universes from '../Universes';
 
 const App = ({ children }) => {
   return (
