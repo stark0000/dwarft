@@ -27,7 +27,7 @@ class Uof extends Component {
         this.deleteuofChild = this.deleteuofChild.bind(this);
 
 
-        this.state = { uof: {}, uot: {}, uoc: [], utp: "", newProp: { name: "", data: "", type: "prop", valid:false } }
+        this.state = { uof: {}, uoc: [], utp: "", newProp: { name: "", data: "", type: "prop", valid:false } }
     }
 
     componentDidMount() {
@@ -54,13 +54,12 @@ class Uof extends Component {
         this.setState({ utp })
 
         ObjectsService.getObjects(objmap).then((uot) => {
-            this.setState({ uot })
             var uof = ObjectsService.getObject(splat, uot)
             var uoc = []
             if (uof.children) {
-                for (var i = 0; i < uof.children.length; i++) {
-                    uoc[i] = uof.children[i]
-                }
+                uof.children.forEach((child)=>{
+                    uoc.push({name:child.name})
+                })
             }
             //var uoc = uof.children
             this.setState({ uoc })
@@ -85,6 +84,13 @@ class Uof extends Component {
                 break;
             }
         }
+        /*
+        un.forEach((child) => {
+            if(child.name===key){
+                delete un[child]
+            }
+        })
+        */
         this.setState({uoc:un})
 
     }
@@ -122,10 +128,19 @@ class Uof extends Component {
         this.setState({ newProp: np });
     }
     isValidNew(val){
+
         for(var n in this.state.uof){
             if(n===val) return false
         }
-
+        
+        //FOREACH possile mais les return de partout j'aime bien
+        /*
+        var isValid=true
+        Object.keys(this.state.uof).forEach((prop)=>{
+            if(prop===val) isValid=false
+        })
+        if(!isValid) return false
+        */
         for(var c in this.state.uoc){
             if(this.state.uoc[c].name===val) return false
         }
@@ -162,16 +177,12 @@ class Uof extends Component {
     //child name edit
     handleChangeValueChild(e) {
         console.log(e.target.name)
-        var k = e.target.name
         var un = this.state.uoc
-        var pos = -1
-        for (var childid in un) {
-            if (un[childid].name === k) {
-                pos = childid
-                break;
+        un.forEach((child)=>{
+            if(child.name===e.target.name){
+                child.name=e.target.value
             }
-        }
-        un[pos].name = e.target.value
+        })
         this.setState({ uoc: un })
     }
 
@@ -179,12 +190,12 @@ class Uof extends Component {
         var parts = utp.split("/")
         var partindexer = []
         var link = ""
-        for (var part in parts) {
-            if (parts[part]) {
-                link = link + "/" + parts[part]
-                partindexer[part - 1] = [parts[part], link]
+        parts.forEach((part)=>{
+            if(part){// for undefined?
+                link=link+"/"+part
+                partindexer.push([part, link])
             }
-        }
+        })
         return partindexer
     }
 
@@ -221,7 +232,6 @@ class Uof extends Component {
                     <h3>uof {name}</h3>
 
                     {JSON.stringify(this.state)}<br />
-                    {JSON.stringify(uof)}
 
                     <h4>properties</h4>
                     <div id="propertiesList">

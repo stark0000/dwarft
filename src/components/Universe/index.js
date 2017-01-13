@@ -1,2 +1,1 @@
-import Universe from './Universe';
-export default Universe;
+export default from './Universe';

@@ -1,2 +1,1 @@
-import AddField from './AddField';
-export default AddField;
+export default from './AddField';

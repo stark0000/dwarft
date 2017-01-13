@@ -12,7 +12,7 @@ const App = ({ children }) => {
     <div className="App">
       <Header />
       <NavBar />
-      { children }
+      {children}
       <Footer />
     </div>
   )

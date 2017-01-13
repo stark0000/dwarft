@@ -1,2 +1,1 @@
-import Uof from './Uof';
-export default Uof;
+export default from './Uof';

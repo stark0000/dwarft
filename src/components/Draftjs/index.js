@@ -1,2 +1,1 @@
-import Draftjs from './Draftjs';
-export default Draftjs;
+export default from './Draftjs';

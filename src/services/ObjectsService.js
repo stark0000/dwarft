@@ -13,38 +13,47 @@ class Service {
     for (var child in children) {
       if (children[child].name === name) return children[child]
     }
+    //FOREACH
+    /*
+    children.forEach((child) => {
+      if (child.name === name) {
+        console.log("pgc: " + JSON.stringify(child))
+        return child
+      }
+    })
+    */
     return false
   }
 
-getObject(tree, o) {
-  var obj = o;
-  if(!tree) return o;
-  var chain = tree.split("/")
+  getObject(tree, o) {
+    var obj = o;
+    if (!tree) return o;
+    var chain = tree.split("/")
 
-  for (var i=0; i<chain.length;i++) {
-    if (!obj.children) return false
-    var child = this.parseGetChild(obj, chain[i])
-    if(!child) return false
-    obj = child
-    if(i===chain.length-1) return obj
+    for (var i = 0; i < chain.length; i++) {
+      if (!obj.children) return false
+      var child = this.parseGetChild(obj, chain[i])
+      if (!child) return false
+      obj = child
+      if (i === chain.length - 1) return obj
+    }
   }
-}
 
-postObject(tree, o) {
-  console.log(name)
-  const options = {
-    method: 'POST',
-    body: JSON.stringify({ name })
+  postObject(tree, o) {
+    console.log(name)
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({ name })
+    }
+    return HttpService.fetch(url, options)
   }
-  return HttpService.fetch(url, options)
-}
 
-deleteObject(tree, id) {
-  const options = {
-    method: 'DELETE',
+  deleteObject(tree, id) {
+    const options = {
+      method: 'DELETE',
+    }
+    return HttpService.fetch(`${url}${tree}/${id}`, options)
   }
-  return HttpService.fetch(`${url}${tree}/${id}`, options)
-}
 
 }
 

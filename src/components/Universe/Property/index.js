@@ -1,2 +1,1 @@
-import Property from './Property';
-export default Property;
+export default from './Property';

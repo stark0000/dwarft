@@ -1,2 +1,1 @@
-import LiItem from './LiItem';
-export default LiItem;
+export default from './LiItem';

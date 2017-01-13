@@ -1,2 +1,1 @@
-import Children from './Children';
-export default Children;
+export default from './Children';

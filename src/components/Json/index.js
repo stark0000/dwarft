@@ -1,2 +1,1 @@
-import Json from './Json';
-export default Json;
+export default from './Json';

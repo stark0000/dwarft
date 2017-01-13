@@ -1,2 +1,1 @@
-import AddSubmit from './AddSubmit';
-export default AddSubmit;
+export default from './AddSubmit';

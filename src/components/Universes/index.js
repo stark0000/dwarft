@@ -1,2 +1,1 @@
-import Universes from './Universes';
-export default Universes;
+export default from './Universes';
