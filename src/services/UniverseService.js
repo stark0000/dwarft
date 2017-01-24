@@ -12,10 +12,12 @@ class Service {
   }
 
   postUniverse(name) {
+    var o = {"name":name, "id":name, "children":[]}
+    var b = JSON.stringify(o)
     console.log(name)
       const options = {
           method: 'POST',
-          body: JSON.stringify({ name })
+          body: b
       }
       return HttpService.fetch(url, options)
   }

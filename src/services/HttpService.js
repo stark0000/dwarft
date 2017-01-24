@@ -1,4 +1,5 @@
 class Service {
+
   fetch(url, options = {}) {
     const surchargedOptions = {
       ...options,
@@ -15,6 +16,8 @@ class Service {
           return response.json();
       })
   }
+
+  
 }
 
 export const HttpService = new Service()

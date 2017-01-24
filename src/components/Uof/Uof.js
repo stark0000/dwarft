@@ -27,7 +27,7 @@ class Uof extends Component {
         this.deleteuofChild = this.deleteuofChild.bind(this);
 
 
-        this.state = { uof: {}, uoc: [], utp: "", newProp: { name: "", data: "", type: "prop", valid:false } }
+        this.state = { uot: {}, uofp: {}, uof: {}, uocp: {}, uoc: [], utp: "", newProp: { name: "", data: "", type: "prop", valid: false } }
     }
 
     componentDidMount() {
@@ -47,39 +47,60 @@ class Uof extends Component {
     refreshUof() {
         const { objmap } = this.props.params
         const { splat } = this.props.params
-        console.log("objmap " + objmap)
-        console.log("splat " + splat)
+        //console.log("objmap " + objmap)
+        //console.log("splat " + splat)
 
         var utp = this.props.router.location.pathname
         this.setState({ utp })
-
-        ObjectsService.getObjects(objmap).then((uot) => {
-            var uof = ObjectsService.getObject(splat, uot)
+        ObjectsService.getObjects(objmap).then((universe) => {
+            var uofp = ObjectsService.getObject(splat, universe)
+            var uot = universe
+            this.setState({ uot })
+            this.setState({ uofp })
+            var uof = JSON.parse(JSON.stringify(uofp))
             var uoc = []
             if (uof.children) {
-                uof.children.forEach((child)=>{
-                    uoc.push({name:child.name})
+                var uocp = uofp.children
+                this.setState({ uocp })
+
+                uof.children.forEach((child) => {
+                    uoc.push({ name: child.name })
                 })
             }
             //var uoc = uof.children
+            uoc = uocp
             this.setState({ uoc })
             delete uof.children
             this.setState({ uof })
         })
     }
 
+    patchUof() {
+        const { objmap } = this.props.params
+        ObjectsService.patchObject(this.state.uot, objmap).then((response) => {
+            this.refreshUof()
+        })
+    }
+
     //delete property
     deleteuofProp(key) {
-        var un = this.state.uof;
+
+        var unt = this.state.uof;
+        var un = this.state.uofp;
+
+        delete unt[key]
         delete un[key]
-        this.setState({ uof: un });
+        
+        this.setState({ uof: unt })
+        this.setState({ uofp: un })
+        this.patchUof()
 
     }
     //delete child
     deleteuofChild(key) {
         var un = this.state.uoc;
         for (var i = 0; i < un.length; i++) {
-            if(un[i].name===key){
+            if (un[i].name === key) {
                 delete un[i]
                 break;
             }
@@ -91,27 +112,37 @@ class Uof extends Component {
             }
         })
         */
-        this.setState({uoc:un})
+        this.setState({ uoc: un })
+        this.patchUof()
 
     }
     //add new property
     adduofProp() {
-        var un = this.state.uof;
+
+        var unt = this.state.uof;
+        var un = this.state.uofp;
+
         var np = this.state.newProp;
         if (np.type === "prop") {
+
+            unt[np.name] = np.data;
+            this.setState({ uof: unt });
             un[np.name] = np.data;
-            this.setState({ uof: un });
+            this.setState({ uofp: un });
+            this.patchUof()
+
         } else if (np.type === "child") {
             var uoc = this.state.uoc
             uoc.push({ name: np.name, children: [] })
             this.setState({ uoc: uoc })
+            this.patchUof()
         } else {
             console.log("undef type in : add property")
         }
-        np.name=""
-        np.data=""
-        np.valid=false
-        this.setState({newProp:np})
+        np.name = ""
+        np.data = ""
+        np.valid = false
+        this.setState({ newProp: np })
     }
 
     //new property type edit
@@ -123,16 +154,16 @@ class Uof extends Component {
     //new property key name edit
     handleChangeName(e) {
         var np = this.state.newProp;
-        np.valid=this.isValidNew(e.target.value)
+        np.valid = this.isValidNew(e.target.value)
         np.name = e.target.value;
         this.setState({ newProp: np });
     }
-    isValidNew(val){
+    isValidNew(val) {
 
-        for(var n in this.state.uof){
-            if(n===val) return false
+        for (var n in this.state.uof) {
+            if (n === val) return false
         }
-        
+
         //FOREACH possile mais les return de partout j'aime bien
         /*
         var isValid=true
@@ -141,12 +172,12 @@ class Uof extends Component {
         })
         if(!isValid) return false
         */
-        for(var c in this.state.uoc){
-            if(this.state.uoc[c].name===val) return false
+        for (var c in this.state.uoc) {
+            if (this.state.uoc[c].name === val) return false
         }
 
-        if(val==="children") return false
-        if(val==="") return false
+        if (val === "children") return false
+        if (val === "") return false
 
         return true
     }
@@ -160,39 +191,60 @@ class Uof extends Component {
     handleChangeKey(e) {
         console.log(e.target.name)
         var k = e.target.name
-        var un = this.state.uof
+
+        var un = this.state.uofp
+        var unt = this.state.uof
+
         var v = un[k]
         delete un[k]
         un[e.target.value] = v
-        this.setState({ uof: un })
+
+        var vt = unt[k]
+        delete unt[k]
+        unt[e.target.value] = vt
+
+        this.setState({ uof: unt })
+        this.setState({ uofp: un })
+        this.patchUof()
+
     }
     //existing property value edit
     handleChangeValue(e) {
         console.log(e.target.name)
         var k = e.target.name
-        var un = this.state.uof
+
+        var un = this.state.uofp
+        var unt = this.state.uof
+
         un[k] = e.target.value
-        this.setState({ uof: un })
+        unt[k] = e.target.value
+
+        this.setState({ uof: unt })
+        this.setState({ uofp: un })
+        this.patchUof()
     }
     //child name edit
     handleChangeValueChild(e) {
         console.log(e.target.name)
+
         var un = this.state.uoc
-        un.forEach((child)=>{
-            if(child.name===e.target.name){
-                child.name=e.target.value
+
+        un.forEach((child) => {
+            if (child.name === e.target.name) {
+                child.name = e.target.value
             }
         })
         this.setState({ uoc: un })
+        this.patchUof()
     }
 
     makeLinks(utp) {
         var parts = utp.split("/")
         var partindexer = []
         var link = ""
-        parts.forEach((part)=>{
-            if(part){// for undefined?
-                link=link+"/"+part
+        parts.forEach((part) => {
+            if (part) {// for undefined?
+                link = link + "/" + part
                 partindexer.push([part, link])
             }
         })
@@ -231,7 +283,20 @@ class Uof extends Component {
 
                     <h3>uof {name}</h3>
 
-                    {JSON.stringify(this.state)}<br />
+                    <span style={{ color: 'red' }}>uot </span>
+                    {JSON.stringify(this.state.uot)}<br /><br />
+                    <span style={{ color: 'red' }}>uofp </span>
+                    {JSON.stringify(this.state.uofp)}<br /><br />
+                    <span style={{ color: 'red' }}>uof </span>
+                    {JSON.stringify(this.state.uof)}<br /><br />
+                    <span style={{ color: 'red' }}>uocp </span>
+                    {JSON.stringify(this.state.uocp)}<br /><br />
+                    <span style={{ color: 'red' }}>uoc </span>
+                    {JSON.stringify(this.state.uoc)}<br /><br />
+                    <span style={{ color: 'red' }}>utp </span>
+                    {JSON.stringify(this.state.utp)}<br /><br />
+                    <span style={{ color: 'red' }}>newprop </span>
+                    {JSON.stringify(this.state.newProp)}<br /><br />
 
                     <h4>properties</h4>
                     <div id="propertiesList">
@@ -279,7 +344,7 @@ class Uof extends Component {
                         <AddSubmit
                             valid={this.state.newProp.valid}
                             adduofProp={this.adduofProp}
-                        />
+                            />
                     </div>
 
                 </div>

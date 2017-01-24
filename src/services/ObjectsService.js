@@ -25,6 +25,7 @@ class Service {
     return false
   }
 
+
   getObject(tree, o) {
     var obj = o;
     if (!tree) return o;
@@ -37,6 +38,15 @@ class Service {
       obj = child
       if (i === chain.length - 1) return obj
     }
+  }
+
+  patchObject(o, id) {
+    var b = JSON.stringify(o)
+    const options = {
+      method: 'PUT',
+      body:b
+    }
+    return HttpService.fetch(url+parent+"/"+id, options)
   }
 
   postObject(tree, o) {
