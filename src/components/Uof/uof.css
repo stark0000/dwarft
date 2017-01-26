@@ -1,0 +1,37 @@
+.browser{
+    background: #EEE;
+    margin-left: 250px;
+}
+
+a{
+    text-decoration: none;
+}
+a:link{
+    color:#B00;
+}
+a:visited{
+    color:#700;
+}
+a:hover{
+    color: #777;
+}
+
+.treeBar{
+    background: #333;
+    color: #FFF;
+
+    width: 500px;
+
+    height: 100%;
+    position: fixed;
+    z-index: top;
+}
+.tree ul li{
+    
+    background: #000;
+    color:#FFF;
+}
+.tree .uotpath{
+    color:#EEE;
+    background: #222;
+}

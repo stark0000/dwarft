@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router'
 import { ObjectsService } from '../../services'
+
+import './uof.css';
 //import { Link } from 'react-router'
 
 
@@ -9,6 +11,7 @@ import Children from './Children';
 import AddField from './AddField';
 import AddSubmit from './AddSubmit';
 import Props from './Props';
+import TreeBar from './TreeBar';
 class Uof extends Component {
 
     constructor(props) {
@@ -90,7 +93,7 @@ class Uof extends Component {
 
         delete unt[key]
         delete un[key]
-        
+
         this.setState({ uof: unt })
         this.setState({ uofp: un })
         this.patchUof()
@@ -263,7 +266,8 @@ class Uof extends Component {
         const links = this.makeLinks(utp)
         var {uof} = this.state
         var name = uof.name
-
+        var {uot} = this.state
+        //console.log("uot: "+JSON.stringify(uot))
 
 
 
@@ -281,72 +285,84 @@ class Uof extends Component {
                 <div>
                     <Nav links={links} />
 
-                    <h3>uof {name}</h3>
-
-                    <span style={{ color: 'red' }}>uot </span>
-                    {JSON.stringify(this.state.uot)}<br /><br />
-                    <span style={{ color: 'red' }}>uofp </span>
-                    {JSON.stringify(this.state.uofp)}<br /><br />
-                    <span style={{ color: 'red' }}>uof </span>
-                    {JSON.stringify(this.state.uof)}<br /><br />
-                    <span style={{ color: 'red' }}>uocp </span>
-                    {JSON.stringify(this.state.uocp)}<br /><br />
-                    <span style={{ color: 'red' }}>uoc </span>
-                    {JSON.stringify(this.state.uoc)}<br /><br />
-                    <span style={{ color: 'red' }}>utp </span>
-                    {JSON.stringify(this.state.utp)}<br /><br />
-                    <span style={{ color: 'red' }}>newprop </span>
-                    {JSON.stringify(this.state.newProp)}<br /><br />
-
-                    <h4>properties</h4>
-                    <div id="propertiesList">
-                        <Props
-                            uof={uof}
-                            handleChangeKey={this.handleChangeKey}
-                            handleChangeValue={this.handleChangeValue}
-                            deleteuofProp={this.deleteuofProp}
+                    <div id="treeBar" className="treeBar">
+                        <TreeBar
+                            uot={this.state.uot}
+                            utp={utp}
                             />
                     </div>
+                    <div id="browser" className="browser">
+                        <h3>uof {name}</h3>
 
-                    <h4>Children</h4>
-                    <div id="childrenList">
-                        <ul>
-                            {Object.keys(this.state.uoc).map(child =>
-                                <Children
-                                    key={child}
-                                    name={this.state.uoc[child].name}
-                                    utp={utp}
-                                    deleteuofChild={this.deleteuofChild}
-                                    handleChangeValueChild={this.handleChangeValueChild}
-                                    />
-                            )}
-                        </ul>
-                    </div>
+                        <span style={{ color: 'red' }}>uot </span>
+                        {JSON.stringify(this.state.uot)}<br /><br />
+                        <span style={{ color: 'red' }}>uofp </span>
+                        {JSON.stringify(this.state.uofp)}<br /><br />
+                        <span style={{ color: 'red' }}>uof </span>
+                        {JSON.stringify(this.state.uof)}<br /><br />
+                        <span style={{ color: 'red' }}>uocp </span>
+                        {JSON.stringify(this.state.uocp)}<br /><br />
+                        <span style={{ color: 'red' }}>uoc </span>
+                        {JSON.stringify(this.state.uoc)}<br /><br />
+                        <span style={{ color: 'red' }}>utp </span>
+                        {JSON.stringify(this.state.utp)}<br /><br />
+                        <span style={{ color: 'red' }}>newprop </span>
+                        {JSON.stringify(this.state.newProp)}<br /><br />
+
+                        <h4>properties</h4>
+                        <div id="propertiesList">
+                            <Props
+                                uof={uof}
+                                handleChangeKey={this.handleChangeKey}
+                                handleChangeValue={this.handleChangeValue}
+                                deleteuofProp={this.deleteuofProp}
+                                />
+                        </div>
+
+                        <h4>Children</h4>
+                        <div id="childrenList">
+                        {
+                            this.state.uoc ?
+                            <ul>
+                                {Object.keys(this.state.uoc).map(child =>
+                                    <Children
+                                        key={child}
+                                        name={this.state.uoc[child].name}
+                                        utp={utp}
+                                        deleteuofChild={this.deleteuofChild}
+                                        handleChangeValueChild={this.handleChangeValueChild}
+                                        />
+                                )}
+                            </ul>
+                            :
+                            <ul>none</ul>
+                        }
+                        </div>
 
 
-                    <h4>add property</h4>
-                    <div id="addPropField">
-                        property type&nbsp;
+                        <h4>add property</h4>
+                        <div id="addPropField">
+                            property type&nbsp;
                     <select name="type" onChange={this.handleChangeType}>
-                            <option value="prop">prop</option>
-                            <option value="text">text</option>
-                            <option value="pic">pic</option>
-                            <option value="child">child</option>
-                        </select>
+                                <option value="prop">prop</option>
+                                <option value="text">text</option>
+                                <option value="pic">pic</option>
+                                <option value="child">child</option>
+                            </select>
 
-                        <AddField
-                            tof={this.state.newProp.type}
-                            newProp={this.state.newProp}
-                            handleChangeName={this.handleChangeName}
-                            handleChangeData={this.handleChangeData}
-                            />
+                            <AddField
+                                tof={this.state.newProp.type}
+                                newProp={this.state.newProp}
+                                handleChangeName={this.handleChangeName}
+                                handleChangeData={this.handleChangeData}
+                                />
 
-                        <AddSubmit
-                            valid={this.state.newProp.valid}
-                            adduofProp={this.adduofProp}
-                            />
+                            <AddSubmit
+                                valid={this.state.newProp.valid}
+                                adduofProp={this.adduofProp}
+                                />
+                        </div>
                     </div>
-
                 </div>
             )
         }
