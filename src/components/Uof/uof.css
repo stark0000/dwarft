@@ -16,7 +16,7 @@ a:hover{
     color: #777;
 }
 
-.treeBar{
+.sbshow{
     background: #333;
     color: #FFF;
 
@@ -26,12 +26,35 @@ a:hover{
     position: fixed;
     z-index: top;
 }
+.sbhide{
+    background: #333;
+    color: #FFF;
+
+    width: 10px;
+
+    height: 100%;
+    position: fixed;
+    z-index: top;
+}
+.sbhide .tree{
+    display: none;
+}
+
 .tree ul li{
-    
+    align-self: left;
     background: #000;
     color:#FFF;
+    padding: 0;
+    margin:0;
 }
 .tree .uotpath{
     color:#EEE;
+    background: #222;
+}
+#shbar{
+    position: absolute;
+    right:0;
+    height: 100%;
+    width: 10px;
     background: #222;
 }

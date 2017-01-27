@@ -28,8 +28,8 @@ const TreeBranch = ({branch, url, utp}) => {
                         {subbranch.map((child) => {
                             return (
 
-                                <li>
-                                    <TreeBranch key={ur + "/" + child.name} branch={child} url={ur} utp={utp}/>
+                                <li key={ur + "/likey/" + child.name}>
+                                    <TreeBranch key={ur + "/tbkey/" + child.name} branch={child} url={ur} utp={utp}/>
                                 </li>)
                         })}
                     </ul>

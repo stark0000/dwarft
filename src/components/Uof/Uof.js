@@ -12,6 +12,7 @@ import AddField from './AddField';
 import AddSubmit from './AddSubmit';
 import Props from './Props';
 import TreeBar from './TreeBar';
+//import MoveField from './MoveField';
 class Uof extends Component {
 
     constructor(props) {
@@ -29,8 +30,21 @@ class Uof extends Component {
         this.deleteuofProp = this.deleteuofProp.bind(this);
         this.deleteuofChild = this.deleteuofChild.bind(this);
 
+        this.shbar = this.shbar.bind(this);
+        this.movetoo = this.movetoo.bind(this);
 
-        this.state = { uot: {}, uofp: {}, uof: {}, uocp: {}, uoc: [], utp: "", newProp: { name: "", data: "", type: "prop", valid: false } }
+        this.state = {
+            uot: {},
+            uofp: {},
+            uof: {},
+            uocp: {},
+            uoc: [],
+            utp: "",
+            newProp: { name: "", data: "", type: "prop", valid: false },
+            showsidebar: "sbhide",
+            movetoo: {}
+
+        }
     }
 
     componentDidMount() {
@@ -59,6 +73,12 @@ class Uof extends Component {
             var uofp = ObjectsService.getObject(splat, universe)
             var uot = universe
             this.setState({ uot })
+                console.log(JSON.stringify(this.state.movetoo))
+            if(JSON.stringify(this.state.movetoo)==={}){
+                console.log(JSON.stringify("d "+this.state.movetoo))
+                var movetoo = uot
+                this.setState({movetoo})
+            }
             this.setState({ uofp })
             var uof = JSON.parse(JSON.stringify(uofp))
             var uoc = []
@@ -257,6 +277,25 @@ class Uof extends Component {
     uofLink(e) {
         console.log(JSON.stringify(e))
     }
+    shbar() {
+        var showsidebar = (this.state.showsidebar === "sbhide" ? "sbshow" : "sbhide")
+        console.log(showsidebar)
+        this.setState({ showsidebar })
+    }
+
+    movetoo(cname) {
+        var movetoo = this.state.movetoo
+        var mtchild = {}
+        if (movetoo.children) {
+            movetoo.children.forEach((child) => {
+                if (child.name === cname) {
+                    mtchild = child
+                }
+            })
+        }
+        movetoo = mtchild
+        this.setState({ movetoo })
+    }
 
     render() {
         //const { uof: { name } } = this.state
@@ -266,9 +305,8 @@ class Uof extends Component {
         const links = this.makeLinks(utp)
         var {uof} = this.state
         var name = uof.name
-        var {uot} = this.state
         //console.log("uot: "+JSON.stringify(uot))
-
+        var {movetoo} = this.state
 
 
         if (!uof) {
@@ -285,7 +323,8 @@ class Uof extends Component {
                 <div>
                     <Nav links={links} />
 
-                    <div id="treeBar" className="treeBar">
+                    <div id="treeBar" className={this.state.showsidebar}>
+                        <button id="shbar" onClick={this.shbar}>x</button>
                         <TreeBar
                             uot={this.state.uot}
                             utp={utp}
@@ -321,25 +360,38 @@ class Uof extends Component {
 
                         <h4>Children</h4>
                         <div id="childrenList">
-                        {
-                            this.state.uoc ?
-                            <ul>
-                                {Object.keys(this.state.uoc).map(child =>
-                                    <Children
-                                        key={child}
-                                        name={this.state.uoc[child].name}
-                                        utp={utp}
-                                        deleteuofChild={this.deleteuofChild}
-                                        handleChangeValueChild={this.handleChangeValueChild}
-                                        />
-                                )}
-                            </ul>
-                            :
-                            <ul>none</ul>
-                        }
+                            {
+                                this.state.uoc ?
+                                    <ul>
+                                        {Object.keys(this.state.uoc).map(child =>
+                                            <Children
+                                                key={child}
+                                                name={this.state.uoc[child].name}
+                                                utp={utp}
+                                                deleteuofChild={this.deleteuofChild}
+                                                handleChangeValueChild={this.handleChangeValueChild}
+                                                />
+                                        )}
+                                    </ul>
+                                    :
+                                    <ul>none</ul>
+                            }
                         </div>
 
-
+                        <h4>move uof to</h4>
+                        <div>
+                            {movetoo.name}<br />
+                            {JSON.stringify(movetoo)}
+                            {movetoo.children ?
+                                <div>
+                                    {
+                                        Object.keys(movetoo.children).map((child) => {
+                                            <li>{child.name}</li>
+                                        })
+                                    }</div>
+                                : <div>empty</div>
+                            }
+                        </div>
                         <h4>add property</h4>
                         <div id="addPropField">
                             property type&nbsp;

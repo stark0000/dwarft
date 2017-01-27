@@ -1,1 +1,1 @@
-export {AddProp, AddChild} from './AddFields';
+export {AddProp, AddChild, AddPic} from './AddFields';
