@@ -54,7 +54,22 @@
               "name": "paté"
             },
             {
-              "name": "truffe"
+              "name": "truffe",
+              "children": [
+                {
+                  "name": "du",
+                  "children": [
+                    {
+                      "name": "périgord",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "name": "noire",
+                  "children": []
+                }
+              ]
             }
           ]
         },
@@ -69,8 +84,6 @@
                 },
                 {
                   "name": "khajit",
-                  "pouet": "xd",
-                  "xd": "kaja",
                   "children": [
                     {
                       "name": "nu",
@@ -78,8 +91,15 @@
                     },
                     {
                       "name": "poilu"
+                    },
+                    {
+                      "name": "en pls",
+                      "children": []
                     }
-                  ]
+                  ],
+                  "pouet": "xd",
+                  "xd": "lol",
+                  "x": "d"
                 },
                 {
                   "name": "finnois",

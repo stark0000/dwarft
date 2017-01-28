@@ -5,7 +5,7 @@ const TreeBar = ({uot, utp}) => {
     if (uot) {
         return (
             <div className="tree">
-    <TreeBranch branch={uot} url="/uof" utp={utp}/>
+                <TreeBranch branch={uot} url="/uof" utp={utp} />
             </div>
         )
     } else {

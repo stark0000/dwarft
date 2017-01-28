@@ -44,9 +44,9 @@ class Service {
     var b = JSON.stringify(o)
     const options = {
       method: 'PUT',
-      body:b
+      body: b
     }
-    return HttpService.fetch(url+parent+"/"+id, options)
+    return HttpService.fetch(url + parent + "/" + id, options)
   }
 
   postObject(tree, o) {

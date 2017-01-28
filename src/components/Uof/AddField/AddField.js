@@ -1,20 +1,20 @@
 import React from 'react';
 import { AddProp, AddChild, AddPic } from './AddTypedField'
 
-const AddField = ({tof, newProp, handleChangeName, handleChangeData}) => {
+const AddField = ({tof, newProp, handleChangeNPname, handleChangeNPdata}) => {
     if (tof === "prop") {
         return (
             <AddProp
                 newProp={newProp}
-                handleChangeName={handleChangeName}
-                handleChangeData={handleChangeData}
+                handleChangeNPname={handleChangeNPname}
+                handleChangeNPdata={handleChangeNPdata}
                 />
         )
     } else if (tof === "child") {
         return (
             <AddChild
                 newProp={newProp}
-                handleChangeName={handleChangeName}
+                handleChangeNPname={handleChangeNPname}
                 />
         )
     } else if (tof === "pic") {
