@@ -12,7 +12,7 @@ import AddField from './AddField';
 import AddSubmit from './AddSubmit';
 import Props from './Props';
 import TreeBar from './TreeBar';
-//import MoveField from './MoveField';
+import MoveField from './MoveField';
 class Uof extends Component {
 
     constructor(props) {
@@ -31,7 +31,7 @@ class Uof extends Component {
         this.deleteuofChild = this.deleteuofChild.bind(this);
 
         this.shbar = this.shbar.bind(this);
-        this.movetoo = this.movetoo.bind(this);
+        this.moveUofTo = this.moveUofTo.bind(this);
 
         this.state = {
             uot: {}, //universe object tree (full)
@@ -39,8 +39,7 @@ class Uof extends Component {
             uoc: [], //uof children array
             utp: "", //universe tree path path of uof in uot
             newProp: { name: "", data: "", type: "prop", valid: false },
-            showsidebar: "sbhide",
-            movetoo: {}
+            showsidebar: "sbhide"
 
         }
     }
@@ -71,13 +70,6 @@ class Uof extends Component {
             var uof = ObjectsService.getObject(splat, universe)
             var uot = universe
             this.setState({ uot })
-            /*
-                console.log(JSON.stringify(this.state.movetoo))
-            if(JSON.stringify(this.state.movetoo)==={}){
-                console.log(JSON.stringify("d "+this.state.movetoo))
-                var movetoo = uot
-                this.setState({movetoo})
-            }*/
             this.setState({ uof })
             var uoc = []
             if (uof.children) {
@@ -110,7 +102,7 @@ class Uof extends Component {
         var un = this.state.uoc;
         for (var i = 0; i < un.length; i++) {
             if (un[i].name === key) {
-                delete un[i]
+                un.splice(i, 1)
                 break;
             }
         }
@@ -246,18 +238,35 @@ class Uof extends Component {
         this.setState({ showsidebar })
     }
 
-    movetoo(cname) {
-        var movetoo = this.state.movetoo
-        var mtchild = {}
-        if (movetoo.children) {
-            movetoo.children.forEach((child) => {
-                if (child.name === cname) {
-                    mtchild = child
+    moveUofTo(ur, andremove = false) {
+        //console.log(ur)
+        var to = this.state.uot
+        var sur: String = ur
+        sur = sur.substring(sur.indexOf('/') + 1)
+        var to = ObjectsService.getObject(sur, to)
+        if (!to) return false
+        if (!to.children) to.children = []
+        to.children.push(this.state.uof)
+        //console.log("to " + JSON.stringify(this.state.uot))
+
+        if (andremove) {
+            var sutp: String = this.props.params.splat
+            sutp = sutp.substring(0, sutp.lastIndexOf('/'))
+            console.log("sutp " + sutp)
+            to = this.state.uot
+            to = ObjectsService.getObject(sutp, to)
+            if (!to) return false
+
+            for (var i = 0; i < to.children.length; i++) {
+                if (to.children[i].name === this.state.uof.name) {
+                    to.children.splice(i, 1)
+                    break;
                 }
-            })
+            }
+
         }
-        movetoo = mtchild
-        this.setState({ movetoo })
+
+        this.patchUof()
     }
 
     render() {
@@ -338,6 +347,10 @@ class Uof extends Component {
 
                         <h4>move uof to</h4>
                         <div>
+                            <MoveField
+                                uot={this.state.uot}
+                                moveUofTo={this.moveUofTo}
+                                />
                         </div>
                         <h4>add property</h4>
                         <div id="addPropField">

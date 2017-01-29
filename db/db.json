@@ -80,26 +80,28 @@
               "name": "terroir",
               "children": [
                 {
-                  "name": "breton"
-                },
-                {
-                  "name": "khajit",
+                  "name": "breton",
                   "children": [
                     {
-                      "name": "nu",
-                      "xd": "nue"
-                    },
-                    {
-                      "name": "poilu"
-                    },
-                    {
-                      "name": "en pls",
-                      "children": []
+                      "name": "khajit",
+                      "children": [
+                        {
+                          "name": "nu",
+                          "xd": "nue"
+                        },
+                        {
+                          "name": "poilu"
+                        },
+                        {
+                          "name": "en pls",
+                          "children": []
+                        }
+                      ],
+                      "pouet": "xd",
+                      "xd": "lol",
+                      "x": "d"
                     }
-                  ],
-                  "pouet": "xd",
-                  "xd": "lol",
-                  "x": "d"
+                  ]
                 },
                 {
                   "name": "finnois",
